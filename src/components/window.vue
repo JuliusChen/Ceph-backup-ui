@@ -109,6 +109,8 @@
 .window {
   width: 40%;
   min-height: 6.5em;
+  height: 15px;
+  line-height: 15px;
 
   border-style: solid;
   border-width: 1px;
@@ -122,25 +124,5 @@
 
 .material-icons.md-18 {
   font-size: 18px;
-}
-
-@mixin title-bar {
-  height: 15px;
-  line-height: 15px;
-  color: black;
-}
-nav {
-  @include title-bar;
-}
-nav i, nav [class^="mdi-"], nav [class*="mdi-"], nav i.meterial-icons {
-  @include title-bar;
-}
-nav .button-collapse i {
-  @include title-bar;
-}
-@media only screen and (min-width: 300px){
-    nav, nav .nav-wrapper i, nav a.button-collapse, nav a.button-collapse i {
-        @include title-bar;
-    }
 }
 </style>
