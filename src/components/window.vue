@@ -22,42 +22,46 @@
       return {
         icon: 'icon',
         window_name: 'window1',
+        is_maximal: false,
+        currentWindow: document.getElementsByClassName('window resize-drag'),
       };
     },
     methods: {
+      setWindow(WindowSize) {
+        this.AppWindow = {};
+        this.AppWindow.Width = WindowSize.clientWidth;
+        this.AppWindow.Height = WindowSize.clientHeight;
+        this.AppWindow.datax = WindowSize.getAttribute('data-x');
+        this.AppWindow.datay = WindowSize.getAttribute('data-y');
+        this.AppWindow.maxmial = (this.AppWindow.Width === window.innerWidth ||
+            this.AppWindow.Height === window.innerHeight) && true;
+      },
+      getWindow() {
+        return this.AppWindow;
+      },
       hide() {
       },
-      resize() {
-        const target = document.getElementById('window');
-        if (this.datax === undefined) {
-          this.datax = target.getAttribute('data-x');
-          this.datay = target.getAttribute('data-y');
-          this.width = target.style.width;
-          this.height = target.style.height;
+      maxmial() {
+        this.is_maximal = true;
+        this.setWindow(this.currentWindow[0]);
 
-          target.style.webkitTransform =
-            target.style.transform = 'translate( 0px, 0px)';
-          target.setAttribute('data-x', 0);
-          target.setAttribute('data-y', 0);
-          target.style.width = `${window.innerWidth}px`;
-          target.style.height = `${window.innerHeight}px`;
-        } else {
-          target.style.webkitTransform =
-            target.style.transform = `translate( ${this.datax}px, ${this.datay}px)`;
-          target.setAttribute('data-x', this.datax);
-          target.setAttribute('data-y', this.datay);
-          target.style.width = `${this.width}`;
-          target.style.height = `${this.height}`;
+        this.currentWindow[0].style.transform = 'translate(0px, 0px)';
+        this.currentWindow[0].style.width = `${window.innerWidth}px`;
+        this.currentWindow[0].style.height = `${window.innerHeight}px`;
+      },
+      rollback() {
+        this.is_maximal = false;
 
-          this.datax = undefined;
-          this.datay = undefined;
-          this.width = undefined;
-          this.height = undefined;
-        }
+        this.currentWindow[0].style.transform = `translate(${this.getWindow().datax}px,
+          ${this.getWindow().datay}px)`;
+        this.currentWindow[0].setAttribute('data-x', this.getWindow().datax);
+        this.currentWindow[0].setAttribute('data-y', this.getWindow().datay);
+
+        this.currentWindow[0].style.width = `${this.getWindow().Width}px`;
+        this.currentWindow[0].style.height = `${this.getWindow().Height}px`;
       },
       close() {
-        const target = document.getElementById('window');
-        target.parentElement.removeChild(target);
+        this.currentWindow[0].parentElement.removeChild(this.currentWindow[0]);
       },
     },
   };
