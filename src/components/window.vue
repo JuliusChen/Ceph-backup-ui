@@ -51,7 +51,7 @@
       },
       rollback() {
         this.is_maximal = false;
-
+        
         this.currentWindow[0].style.transform = `translate(${this.getWindow().datax}px,
           ${this.getWindow().datay}px)`;
         this.currentWindow[0].setAttribute('data-x', this.getWindow().datax);
