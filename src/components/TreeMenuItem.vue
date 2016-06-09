@@ -1,10 +1,9 @@
 <template>
   <div class="tree-menu-item" v-bind:class="{'is-expanded': hasChild && isExpanded, 'top-level': topLevel}">
     <div class="tree-menu-item-label" v-on:click="toggleItem">
-      <a><i v-if="icon" class="tree-menu-item-icon material-icons">{{icon}}</i>{{ text }}</a></span>
+      <a><i v-if="text" class="tree-menu-item-icon material-icons">{{icon}}</i>{{ text }}</a></span>
     </div>
     <div class="tree-menu-item-content" v-on:click.prevent v-show="isExpanded">
-      <slot></slot>
     </div>
   </div>
 </template>
@@ -65,14 +64,19 @@
 </style>
 
 <script>
+import window from './window.vue';
+
 export default {
   props: {
     icon: {},
-    text: {},
+    text: '',
     path: {},
     isExpanded: {
       type: Boolean,
     },
+  },
+  components: {
+    window,
   },
   data: () => ({
     hasChild: false,
@@ -88,6 +92,7 @@ export default {
   methods: {
     toggleItem() {
       this.isExpanded = !this.isExpanded;
+      this.$dispatch('listenChange', this.text);
     },
   },
 };
