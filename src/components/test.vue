@@ -1,5 +1,5 @@
 <template>
-  <div class="hello">
+  <div class="test">
     <h1>{{ msg }}</h1>
   </div>
 </template>
@@ -15,14 +15,9 @@ h1 {
 export default {
   data() {
     return {
-      // note: changing this line won't causes changes
-      // with hot-reload because the reloaded component
-      // preserves its current state and we are modifying
-      // its initial state.
-      msg: 'Hello World!',
+      msg: 'Hello Test',
     };
   },
 };
 </script>
-
 
