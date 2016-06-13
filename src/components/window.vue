@@ -136,7 +136,7 @@
 .window {
   width: 70%;
   min-height: 6.5em;
-  height: 15px;
+  height: 40%;
   line-height: 15px;
 
   border-style: solid;
