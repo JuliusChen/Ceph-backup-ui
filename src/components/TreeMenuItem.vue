@@ -1,7 +1,7 @@
 <template>
   <div class="tree-menu-item" v-bind:class="{'is-expanded': hasChild && isExpanded, 'top-level': topLevel}">
     <div class="tree-menu-item-label" v-on:click="toggleItem">
-      <a><i v-if="text" class="tree-menu-item-icon material-icons">{{icon}}</i>{{ text }}</a></span>
+      <a><i v-if="view" class="tree-menu-item-icon material-icons">{{icon}}</i>{{ title }}</a></span>
     </div>
     <div class="tree-menu-item-content" v-on:click.prevent v-show="isExpanded">
     </div>
@@ -68,8 +68,9 @@ import window from './window.vue';
 
 export default {
   props: {
-    icon: {},
-    text: '',
+    icon: '',
+    view: '',
+    title: '',
     path: {},
     isExpanded: {
       type: Boolean,
@@ -92,7 +93,7 @@ export default {
   methods: {
     toggleItem() {
       this.isExpanded = !this.isExpanded;
-      this.$dispatch('listenChange', this.text);
+      this.$dispatch('changeView', this.view);
     },
   },
 };
