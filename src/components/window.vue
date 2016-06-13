@@ -5,7 +5,8 @@
         <span class="black-text">{{ icon }} {{ window_name }}</span>
         <ul class="right hide-on-med-and-down">
           <li v-on:click="hide"><a><i class="material-icons black-text md-18">remove</i></a></li>
-          <li v-on:click="resize" ><a><i class="material-icons black-text md-18">check_box_outline_blank</i></a></li>
+          <li v-on:click="maximal" v-if="!is_maximal"><a><i class="material-icons black-text md-18">check_box_outline_blank</i></a>
+          <li v-on:click="rollback" v-if="is_maximal"><a><i class="material-icons black-text md-18">check_box_outline_blank</i></a>
           <li v-on:click="close" class="nav-button"><a><i class="material-icons black-text md-18">close</i></a></li>
         </ul>
         </ul>
@@ -59,7 +60,7 @@
       },
       hide() {
       },
-      maxmial() {
+      maximal() {
         this.is_maximal = true;
         this.setWindow(this.currentWindow[0]);
 
