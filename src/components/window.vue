@@ -30,6 +30,8 @@
   import interact from 'interact.js';
   import TreeMenu from './TreeMenu.vue';
   import TreeMenuItem from './TreeMenuItem.vue';
+  import TaskList from './TaskList.vue';
+  import BackupPlan from './BackupPlan.vue';
 
   export default {
     data() {
@@ -44,6 +46,8 @@
     components: {
       TreeMenu,
       TreeMenuItem,
+      TaskList,
+      BackupPlan,
     },
     methods: {
       setWindow(WindowSize) {
