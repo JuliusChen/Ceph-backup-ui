@@ -87,7 +87,12 @@ h1 {
 </style>
 
 <script>
+import Xhr from './XhrService.vue';
+
 export default {
+  components: {
+    Xhr,
+  },
   data() {
     return {
       picked: '',
@@ -107,8 +112,7 @@ export default {
         backupIteration: '',
       },
       RBDpoolLists: ['RBD pool 0', 'RBD pool 1', 'RBD pool 2'],
-      RADOSpoolists: ['.rgw.root', '.rgw.control', '.rgw.gc', '.rgw.buckets', '.rgw.index',
-       '.rgw.extra', '.log', '.intent-log', '.usage', '.users', '.users.email'],
+      RADOSpoolists: [],
       imageLists: [],
     };
   },
@@ -116,6 +120,20 @@ export default {
     for (let i = 0; i < 100; i++) {
       this.imageLists[i] = `pool-image${i}`;
     }
+  },
+  ready() {
+    Xhr.methods.getPoolList()
+    .then(
+      (res) => {
+        if (typeof res === 'object') {
+          this.RADOSpoolists = res.map(v => v.name);
+        } else {
+          this.RADOSpoolists = ['.rgw.root', '.rgw.control', '.rgw.gc',
+           '.rgw.buckets', '.rgw.index', '.rgw.extra', '.log', '.intent-log',
+           '.usage', '.users', '.users.email'];
+          console.log(res);
+        }
+      });
   },
   watch: {
     picked(val) {
@@ -148,6 +166,9 @@ export default {
     },
   },
   methods: {
+    submit() {
+      console.log('test');
+    },
   },
 };
 </script>

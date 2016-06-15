@@ -17,17 +17,14 @@ export default({
     };
   },
   methods: {
-    getPool() {
+    getPoolList() {
       return Vue.http({
-        url: '/test',
+        url: 'http://private-anon-aeb6dbe32-backuprestapi.apiary-mock.com/api/v1/pools',
         method: 'GET',
-      }).then((res) => {
-        console.log('Impossible');
-        console.log(res);
-      }, (res) => {
-        console.log('WTF');
-        console.log(res);
-      });
+      }).then(
+        (res => res.data),
+        (res => res.statusText)
+      );
     },
   },
 });
