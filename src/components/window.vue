@@ -5,17 +5,31 @@
         <span class="black-text">{{ icon }} {{ window_name }}</span>
         <ul class="right hide-on-med-and-down">
           <li v-on:click="hide"><a><i class="material-icons black-text md-18">remove</i></a></li>
-          <li v-on:click="resize" ><a><i class="material-icons black-text md-18">check_box_outline_blank</i></a></li>
+          <li v-on:click="maximal" v-if="!is_maximal"><a><i class="material-icons black-text md-18">check_box_outline_blank</i></a>
+          <li v-on:click="rollback" v-if="is_maximal"><a><i class="material-icons black-text md-18">check_box_outline_blank</i></a>
           <li v-on:click="close" class="nav-button"><a><i class="material-icons black-text md-18">close</i></a></li>
         </ul>
         </ul>
       </div>
     </nav>
+    <div class="row" id="app">
+      <div class="col-md-3">
+        <tree-menu>
+          <tree-menu-item isExpanded view="BackupPlan" icon="view_agenda" title="Buliding Up Backup Plan"></tree-menu-item>
+          <tree-menu-item isExpanded view="TaskList" icon="format_list_bulleted" title="List Backup Tasks"></tree-menu-item>
+        </tree-menu>
+      </div>
+      <div class="col-md-9">
+        <component :is="currentView"></component>
+      </div>
+    </div>
   </div>
 </template>
 
 <script>
   import interact from 'interact.js';
+  import TreeMenu from './TreeMenu.vue';
+  import TreeMenuItem from './TreeMenuItem.vue';
 
   export default {
     data() {
@@ -24,7 +38,12 @@
         window_name: 'window1',
         is_maximal: false,
         currentWindow: document.getElementsByClassName('window resize-drag'),
+        currentView: 'BackupPlan',
       };
+    },
+    components: {
+      TreeMenu,
+      TreeMenuItem,
     },
     methods: {
       setWindow(WindowSize) {
@@ -41,7 +60,7 @@
       },
       hide() {
       },
-      maxmial() {
+      maximal() {
         this.is_maximal = true;
         this.setWindow(this.currentWindow[0]);
 
@@ -62,6 +81,11 @@
       },
       close() {
         this.currentWindow[0].parentElement.removeChild(this.currentWindow[0]);
+      },
+    },
+    events: {
+      changeView(view) {
+        this.currentView = view;
       },
     },
   };
@@ -111,9 +135,9 @@
 
 <style lang="scss">
 .window {
-  width: 40%;
+  width: 70%;
   min-height: 6.5em;
-  height: 15px;
+  height: 40%;
   line-height: 15px;
 
   border-style: solid;

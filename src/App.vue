@@ -11,6 +11,9 @@ export default {
   components: {
     window,
   },
+  data: () => ({
+    currentView: '',
+  }),
 };
 </script>
 
