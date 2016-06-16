@@ -4,6 +4,9 @@ import VueResource from 'vue-resource';
 
 Vue.use(VueResource);
 
+// const webUrl = 'http://172.25.0.155/api/v1';
+const MockServer = 'http://private-anon-a4e11a3bd-backuprestapi.apiary-mock.com/api/v1';
+
 export default({
   data() {
     return {
@@ -13,7 +16,7 @@ export default({
   methods: {
     getPoolList() {
       return Vue.http({
-        url: 'http://private-anon-aeb6dbe32-backuprestapi.apiary-mock.com/api/v1/pools',
+        url: `${MockServer}/pools`,
         method: 'GET',
       }).then(
         (res => res.data),
@@ -22,13 +25,22 @@ export default({
     },
     sendBackupTask(Item) {
       return Vue.http({
-        url: 'http://private-anon-aeb6dbe32-backuprestapi.apiary-mock.com/api/v1/tasks',
+        url: `${MockServer}/tasks`,
         method: 'POST',
         data: {
           backup_type: 'pools',
           pools: Item.selectedRADOSPools,
           is_scheduled: false,
         },
+      }).then(
+        (res => res.data),
+        (res => res.statusText)
+      );
+    },
+    getTaskProgress(Task) {
+      return Vue.http({
+        url: `${MockServer}/tasks/${Task}/progress`,
+        method: 'GET',
       }).then(
         (res => res.data),
         (res => res.statusText)

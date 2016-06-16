@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div v-if="!isBackuping">
     <form class="col s12">
       <input value="RBD" type="radio" id="radio1" v-model="picked"/>
       <label for="radio1">RBD(block device)</label><br>
@@ -54,11 +54,29 @@
       </div>
     </form>
 
-    <button class="btn waves-effect waves-light space" type="submit" name="action"
-      v-if="submitItem.selectedRADOSPools.length>0" v-on:click="submit">Submit
+    <button class="btn waves-effect waves-light space disabled" type="submit" name="action"
+      v-if="submitItem.selectedRADOSPools.length==0 || state.isRADOSMockData" v-on:click="submit">Submit
       <i class="material-icons right">send</i>
     </button>
 
+    <button class="btn waves-effect waves-light space" type="submit" name="action"
+      v-if="submitItem.selectedRADOSPools.length>0 && !state.isRADOSMockData" v-on:click="submit">Submit
+      <i class="material-icons right">send</i>
+    </button>
+  </div>
+
+  <div v-if="isBackuping">
+    <div class="preloader-wrapper big active center">
+      <div class="spinner-layer spinner-blue-only">
+        <div class="circle-clipper left">
+          <div class="circle"></div>
+      </div><div class="gap-patch">
+        <div class="circle"></div>
+      </div><div class="circle-clipper right">
+        <div class="circle"></div>
+        </div>
+      </div>
+    </div>
   </div>
 </template>
 
@@ -93,19 +111,29 @@ h1 {
 {
   margin-top: 2em;
 }
+.center
+{
+  position: absolute;
+  top: 50%;
+  left: 50%;
+}
 </style>
 
 <script>
 import Xhr from './XhrService.vue';
+import AppWindow from './window.vue';
 
 export default {
   components: {
     Xhr,
+    AppWindow,
   },
   data() {
     return {
       picked: '',
       selected: '',
+      isBackuping: false,
+      taskUUID: '',
       state: {
         isRBD: false,
         isRADOS: false,
@@ -136,7 +164,7 @@ export default {
     .then(
       (res) => {
         if (typeof res === 'object') {
-          this.RADOSpoolists = res.map(v => v.name);
+          this.RADOSpoolists = res.map(v => !v.is_onbackup ? v.name : undefined).filter(v => !!v);
           this.state.isRADOSMockData = false;
         } else {
           this.RADOSpoolists = ['.rgw.root', '.rgw.control', '.rgw.gc',
@@ -175,8 +203,28 @@ export default {
         this.backupIteration = '';
       }
     },
+    isBackuping(val) {
+      if (val === true) {
+        console.log('WTF');
+        this.poll();
+      }
+    },
   },
   methods: {
+    poll() {
+      setTimeout(() => {
+        Xhr.methods.getTaskProgress(this.taskUUID)
+        .then((res) => {
+          if (res.progress !== '100') {
+            this.poll();
+            console.log(res.progress);
+          } else {
+            this.taskUUID = '';
+            this.isBackuping = false;
+          }
+        });
+      }, 1000);
+    },
     reset() {
       this.state.isRBD = false;
       this.state.isRADOS = false;
@@ -196,6 +244,8 @@ export default {
         (res) => {
           if (typeof res === 'object') {
             console.log(res);
+            this.taskUUID = res.uuid;
+            this.isBackuping = true;
           } else {
             console.log(res);
           }
