@@ -9,7 +9,7 @@
         <div v-if="state.useRBDPool">
 
           <div v-for="pool in RBDpoolLists" class="tab">
-            <input value="{{ pool }}" type="checkbox" id="{{ pool }}" v-model="submit.selectedRBDPools"/>
+            <input value="{{ pool }}" type="checkbox" id="{{ pool }}" v-model="submitItem.selectedRBDPools"/>
             <label for="{{ pool }}">{{ pool }}</label><br>
           </div>
         </div>
@@ -17,7 +17,7 @@
         <input value="RBDImage" type="radio" id="radio3" v-model="selected"/>
         <label for="radio3">Backup Selected Pool and Specified Images</label><br>
           <div v-if="state.useRBDImage">
-            <select class="browser-default" v-model="submit.selectedRBDPool">
+            <select class="browser-default" v-model="submitItem.selectedRBDPool">
               <option value="" disabled selected>Choose your pool</option>
               <option v-for="pool in RBDpoolLists" value="{{ pool }}">{{ pool }}</option>
             </select>
@@ -25,16 +25,16 @@
               <span>Selected Images</span>
               <div class="Content">
                 <div v-for="image in imageLists">
-                  <input value="{{ image }}" type="checkbox" id="{{ image }}" v-model="submit.selectedimages"/>
+                  <input value="{{ image }}" type="checkbox" id="{{ image }}" v-model="submitItem.selectedimages"/>
                   <label for="{{ image }}">{{ image }}</label><br>
                 </div>
               </div>
             </div>
             <div>
               <label for="backupCount">Incremental backup counts between full backup</label>
-              <input type="number" placeholder="Pick a number" v-model="submit.backupNumberCount" id="backupCount" min="0" max="100">
+              <input type="number" placeholder="Pick a number" v-model="submitItem.backupNumberCount" id="backupCount" min="0" max="100">
               <label for="backupIteraion">Preserve backup iteration count</label>
-              <input type="number" placeholder="Pick a number" v-model="submit.backupInteration" id="backupIteraion" min="0" max="100">
+              <input type="number" placeholder="Pick a number" v-model="submitItem.backupInteration" id="backupIteraion" min="0" max="100">
             </div>
           </div>
       </div>
@@ -46,14 +46,19 @@
           <span>Selected Backup pools</span>
           <div class="Content">
             <div v-for="pool in RADOSpoolists">
-              <input value="{{ pool }}" type="checkbox" id="{{ pool }}" v-model="submit.selectedRADOSPools"/>
+              <input value="{{ pool }}" type="checkbox" id="{{ pool }}" v-model="submitItem.selectedRADOSPools"/>
               <label for="{{ pool }}">{{ pool }}</label><br>
             </div>
           </div>
         </div>
       </div>
-
     </form>
+
+    <button class="btn waves-effect waves-light space" type="submit" name="action"
+      v-if="submitItem.selectedRADOSPools.length>0" v-on:click="submit">Submit
+      <i class="material-icons right">send</i>
+    </button>
+
   </div>
 </template>
 
@@ -65,14 +70,14 @@ h1 {
 .FixedHeightContainer
 {
   float:left;
-  height:250px;
+  height:140px;
   width:100%; 
   padding:3px; 
   background:#a9a;
 }
 .Content
 {
-  height:224px;
+  height:114px;
   overflow:auto;
   background:#fff;
 }
@@ -83,6 +88,10 @@ h1 {
 .tab2
 {
   padding-left: 4em;
+}
+.space
+{
+  margin-top: 2em;
 }
 </style>
 
@@ -102,8 +111,9 @@ export default {
         isRADOS: false,
         useRBDPool: false,
         useRBDImage: false,
+        isRADOSMockData: true,
       },
-      submit: {
+      submitItem: {
         selectedRBDPools: [],
         selectedRBDPool: '',
         selectedRADOSPools: [],
@@ -127,6 +137,7 @@ export default {
       (res) => {
         if (typeof res === 'object') {
           this.RADOSpoolists = res.map(v => v.name);
+          this.state.isRADOSMockData = false;
         } else {
           this.RADOSpoolists = ['.rgw.root', '.rgw.control', '.rgw.gc',
            '.rgw.buckets', '.rgw.index', '.rgw.extra', '.log', '.intent-log',
@@ -140,12 +151,12 @@ export default {
       if (val === 'RBD') {
         this.state.isRBD = true;
         this.state.isRADOS = false;
-        this.submit.selectedRADOSPools = [];
+        this.submitItem.selectedRADOSPools = [];
       } else if (val === 'RADOS') {
         this.state.isRADOS = true;
         this.state.isRBD = false;
-        this.submit.selectedRBDPools = [];
-        this.submit.selectedimages = [];
+        this.submitItem.selectedRBDPools = [];
+        this.submitItem.selectedimages = [];
         this.backupNumberCount = '';
         this.backupIteration = '';
       }
@@ -154,20 +165,43 @@ export default {
       if (val === 'RBDPool') {
         this.state.useRBDPool = true;
         this.state.useRBDImage = false;
-        this.submit.selectedimages = [];
-        this.submit.selectedRBDPool = '';
+        this.submitItem.selectedimages = [];
+        this.submitItem.selectedRBDPool = '';
       } else if (val === 'RBDImage') {
         this.state.useRBDImage = true;
         this.state.useRBDPool = false;
-        this.submit.selectedRBDPools = [];
+        this.submitItem.selectedRBDPools = [];
         this.backupNumberCount = '';
         this.backupIteration = '';
       }
     },
   },
   methods: {
+    reset() {
+      this.state.isRBD = false;
+      this.state.isRADOS = false;
+      this.state.useRBDPool = false;
+      this.state.useRBDImage = false;
+      this.state.isRADOSMockData = true;
+      this.submitItem.selectedRBDPools = [];
+      this.submitItem.selectedRBDPool = '';
+      this.submitItem.selectedRADOSPools = [];
+      this.submitItem.selectedimages = [];
+      this.submitItem.backupNumberCount = '';
+      this.submitItem.backupIteration = '';
+    },
     submit() {
-      console.log('test');
+      Xhr.methods.sendBackupTask(this.submitItem)
+      .then(
+        (res) => {
+          if (typeof res === 'object') {
+            console.log(res);
+          } else {
+            console.log(res);
+          }
+        });
+
+      this.reset();
     },
   },
 };
