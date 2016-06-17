@@ -210,7 +210,6 @@ export default {
         .then((res) => {
           if (res.progress !== 100) {
             this.taskProgress = res.progress;
-            console.log(res.progress);
             this.poll();
           } else {
             this.taskUUID = '';
@@ -231,15 +230,14 @@ export default {
             this.RADOSpoolists = ['.rgw.root', '.rgw.control', '.rgw.gc',
              '.rgw.buckets', '.rgw.index', '.rgw.extra', '.log', '.intent-log',
              '.usage', '.users', '.users.email'];
-            console.log(res);
+            this.state.isRADOSMockData = true;
           }
         });
 
       this.state.isRBD = false;
-      this.state.isRADOS = false;
+      this.state.isRADOS = true;
       this.state.useRBDPool = false;
       this.state.useRBDImage = false;
-      this.state.isRADOSMockData = true;
       this.submitItem.selectedRBDPools = [];
       this.submitItem.selectedRBDPool = '';
       this.submitItem.selectedRADOSPools = [];
@@ -252,7 +250,6 @@ export default {
       .then(
         (res) => {
           if (typeof res === 'object') {
-            console.log(res);
             this.taskUUID = res.uuid;
             this.isBackuping = true;
           } else {
