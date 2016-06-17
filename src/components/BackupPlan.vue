@@ -205,7 +205,6 @@ export default {
     },
     isBackuping(val) {
       if (val === true) {
-        console.log('WTF');
         this.poll();
       }
     },
@@ -215,7 +214,7 @@ export default {
       setTimeout(() => {
         Xhr.methods.getTaskProgress(this.taskUUID)
         .then((res) => {
-          if (res.progress !== '100') {
+          if (res.progress !== 100) {
             this.poll();
             console.log(res.progress);
           } else {
