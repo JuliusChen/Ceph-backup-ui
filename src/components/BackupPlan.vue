@@ -55,7 +55,7 @@
     </form>
 
     <button class="btn waves-effect waves-light space disabled" type="submit" name="action"
-      v-if="submitItem.selectedRADOSPools.length==0 || state.isRADOSMockData" v-on:click="submit">Submit
+      v-if="submitItem.selectedRADOSPools.length==0 || state.isRADOSMockData">Submit
       <i class="material-icons right">send</i>
     </button>
 
@@ -77,6 +77,7 @@
         </div>
       </div>
     </div>
+    <span class="centerPading">{{taskProgress}} %</span>
   </div>
 </template>
 
@@ -117,16 +118,20 @@ h1 {
   top: 50%;
   left: 50%;
 }
+.centerPading
+{
+  position: absolute;
+  top: 2em;
+  left: 52%;
+}
 </style>
 
 <script>
 import Xhr from './XhrService.vue';
-import AppWindow from './window.vue';
 
 export default {
   components: {
     Xhr,
-    AppWindow,
   },
   data() {
     return {
@@ -134,6 +139,7 @@ export default {
       selected: '',
       isBackuping: false,
       taskUUID: '',
+      taskProgress: '',
       state: {
         isRBD: false,
         isRADOS: false,
@@ -160,19 +166,7 @@ export default {
     }
   },
   ready() {
-    Xhr.methods.getPoolList()
-    .then(
-      (res) => {
-        if (typeof res === 'object') {
-          this.RADOSpoolists = res.map(v => !v.is_onbackup ? v.name : undefined).filter(v => !!v);
-          this.state.isRADOSMockData = false;
-        } else {
-          this.RADOSpoolists = ['.rgw.root', '.rgw.control', '.rgw.gc',
-           '.rgw.buckets', '.rgw.index', '.rgw.extra', '.log', '.intent-log',
-           '.usage', '.users', '.users.email'];
-          console.log(res);
-        }
-      });
+    this.reset();
   },
   watch: {
     picked(val) {
@@ -215,16 +209,32 @@ export default {
         Xhr.methods.getTaskProgress(this.taskUUID)
         .then((res) => {
           if (res.progress !== 100) {
-            this.poll();
+            this.taskProgress = res.progress;
             console.log(res.progress);
+            this.poll();
           } else {
             this.taskUUID = '';
             this.isBackuping = false;
+            this.taskProgress = 0;
           }
         });
       }, 1000);
     },
     reset() {
+      Xhr.methods.getPoolList()
+      .then(
+        (res) => {
+          if (typeof res === 'object') {
+            this.RADOSpoolists = res.map(v => !v.is_onbackup ? v.name : undefined).filter(v => !!v);
+            this.state.isRADOSMockData = false;
+          } else {
+            this.RADOSpoolists = ['.rgw.root', '.rgw.control', '.rgw.gc',
+             '.rgw.buckets', '.rgw.index', '.rgw.extra', '.log', '.intent-log',
+             '.usage', '.users', '.users.email'];
+            console.log(res);
+          }
+        });
+
       this.state.isRBD = false;
       this.state.isRADOS = false;
       this.state.useRBDPool = false;
