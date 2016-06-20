@@ -3,8 +3,10 @@
     <div class="row" id="app">
       <div class="col-md-3">
         <tree-menu>
-          <tree-menu-item isExpanded view="BackupPlan" icon="view_agenda" title="Buliding Up Backup Plan"></tree-menu-item>
-          <tree-menu-item isExpanded view="TaskList" icon="format_list_bulleted" title="List Backup Tasks"></tree-menu-item>
+          <tree-menu-item is-expanded view="ClusterPortal" icon="wifi_tethering" title="Ceph Cluster 1">
+            <tree-menu-item is-expanded view="BackupPlan" icon="view_agenda" title="Buliding Up Backup Plan"></tree-menu-item>
+            <tree-menu-item is-expanded view="TaskList" icon="format_list_bulleted" title="List Backup Tasks"></tree-menu-item>
+          </tree-menu-item>
         </tree-menu>
       </div>
       <div class="col-md-9">
@@ -26,6 +28,7 @@ import TreeMenu from './TreeMenu.vue';
 import TreeMenuItem from './TreeMenuItem.vue';
 import TaskList from './TaskList.vue';
 import BackupPlan from './BackupPlan.vue';
+import ClusterPortal from './ClusterPortal/ClusterPortal';
 
 export default {
   components: {
@@ -34,10 +37,11 @@ export default {
     TreeMenuItem,
     TaskList,
     BackupPlan,
+    ClusterPortal,
   },
   data() {
     return {
-      currentView: 'BackupPlan',
+      currentView: 'ClusterPortal',
     };
   },
   events: {
@@ -47,4 +51,3 @@ export default {
   },
 };
 </script>
-
