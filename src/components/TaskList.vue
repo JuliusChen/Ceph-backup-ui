@@ -22,6 +22,8 @@
       </tr>
     </tbody>
   </table>
+  <message-box :is-show="show" :task="tasks[task_num]">
+  </message-box>
 </template>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
@@ -32,11 +34,15 @@ h1 {
 </style>
 
 <script>
+import MessageBox from './MessageBox';
 const async = require('async');
 const $ = require('jquery');
 
 
 export default {
+  components: {
+    MessageBox,
+  },
   data() {
     return {
       show: false,
