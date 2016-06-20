@@ -4,6 +4,7 @@
       <a><i v-if="view" class="tree-menu-item-icon material-icons">{{icon}}</i>{{ title }}</a></span>
     </div>
     <div class="tree-menu-item-content" v-on:click.prevent v-show="isExpanded">
+      <slot></slot>
     </div>
   </div>
 </template>
