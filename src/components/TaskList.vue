@@ -2,21 +2,25 @@
   <div>
     <h3>Task List</h3>
   </div>
-  <table width="300" border="1">
-    <tr>
-      <td>No</td>
-      <td>type</td>
-      <td>task name</td>
-      <td>progress</td>
-      <td>detail</td>
-    </tr>
-    <tr v-for="task in tasklists">
-      <td>{{task.no}}</td>
-      <td>{{task.type}}</td>
-      <td>{{task.id}}</td>
-      <td>{{task.progress}}</td>
-      <td>detail</td>
-    </tr>
+  <table class="mdl-data-table mdl-js-data-table">
+    <thead>
+      <tr>
+        <th>No</th>
+        <th>type</th>
+        <th>task name</th>
+        <th>progress</th>
+        <th>detail</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr v-for="task in tasks" track-by="$index">
+        <td>{{ $index + 1 }}</td>
+        <td>{{ task.backup_type }}</td>
+        <td>{{ task.uuid }}</td>
+        <td>{{ task.rate }}</td>
+        <td v-on:click="showDetail($index)">detail</td>
+      </tr>
+    </tbody>
   </table>
 </template>
 
@@ -28,28 +32,52 @@ h1 {
 </style>
 
 <script>
+const async = require('async');
+const $ = require('jquery');
+
+
 export default {
   data() {
     return {
-      tasklists: [
-        {
-          id: '2016-05-25-xxxx-1',
-          no: 1,
-          type: 'pool',
-          progress: '10%',
-          uuid: 'ebdc7aaf-2652-4128-bfd1-0a5d6d0acc6f',
-        },
-        {
-          id: '2016-05-25-xxxx-2',
-          no: 2,
-          type: 'pool',
-          progress: '87%',
-          uuid: 'd153b5ba-649b-481e-ae61-7ae5e792ae02',
-        },
-      ],
+      show: false,
+      task_num: 0,
+      tasks: [],
+      polling_task: false,
     };
+  },
+  ready() {
+    $.get('/api/v1/tasks/', (result) => {
+      this.$data.tasks = result;
+      for (const task of this.$data.tasks) {
+        let rate = 0;
+        if (!task.progressing) { rate = 100; }
+        task.rate = rate;
+      }
+      this.$data.polling_task = true;
+    });
+  },
+  methods: {
+    showDetail(i) {
+      this.show = !this.show;
+      this.task_num = i;
+    },
+    update_rate(task) {
+      setTimeout(() => {
+        $.get(`/api/v1/tasks/${task[1].uuid}/progress`, (result) => {
+          if (result.progress < 100 && result.progress !== null) {
+            this.update_rate(task);
+          }
+        });
+      }, 1000);
+    },
+  },
+  watch: {
+    polling_task() {
+      const tasks = this.tasks.entries();
+      async.map(tasks, (task) => {
+        this.update_rate(task);
+      });
+    },
   },
 };
 </script>
-
-
