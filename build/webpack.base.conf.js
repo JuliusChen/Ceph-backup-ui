@@ -5,6 +5,7 @@ var projectRoot = path.resolve(__dirname, '../')
 
 module.exports = {
   entry: {
+    polyfill: 'babel-polyfill',
     app: './src/main.js'
   },
   output: {
