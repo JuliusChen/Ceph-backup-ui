@@ -70,8 +70,15 @@ export default {
     update_rate(task) {
       setTimeout(() => {
         $.get(`/api/v1/tasks/${task[1].uuid}/progress`, (result) => {
+          const updatedTask = {};
+          $.extend(updatedTask, task[1]);
           if (result.progress < 100 && result.progress !== null) {
+            updatedTask.rate = result.progress;
+            this.tasks.$set(task[0], updatedTask);
             this.update_rate(task);
+          } else {
+            updatedTask.rate = 100;
+            this.tasks.$set(task[0], updatedTask);
           }
         });
       }, 1000);
