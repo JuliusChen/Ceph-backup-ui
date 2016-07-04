@@ -14,6 +14,33 @@ describe('Xhr.vue', () => {
   const XhrRequest = vm.$refs.component;
 
   it('getPoolList should return an object with correct property', (done) => {
+    const get = sinon.stub(XhrRequest, 'getPoolList');
+
+    get.returns(Promise.resolve(
+      [
+        {
+          is_onbackup: true,
+          name: 'rbd',
+        },
+        {
+          is_onbackup: true,
+          name: 'rbd2',
+        },
+        {
+          is_onbackup: false,
+          name: 'rbd3',
+        },
+        {
+          is_onbackup: false,
+          name: 'rbd4',
+        },
+        {
+          is_onbackup: false,
+          name: 'rbd5',
+        },
+      ]
+    ));
+
     XhrRequest.getPoolList()
     .then((data) => {
       done();
@@ -23,6 +50,8 @@ describe('Xhr.vue', () => {
     }, (error) => {
       assert.fail(error);
     });
+
+    get.restore();
   });
 
   it('getTaskProgress should return an object with correct property', (done) => {
