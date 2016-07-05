@@ -7,10 +7,13 @@ describe('BackupPlan.vue', () => {
     components: { BackupPlan },
   }).$mount();
 
-  it('Backup Plan should render correct contents', () => {
-    const menuItems = vm.$el.querySelectorAll('div.tree-menu-item');
-    expect(menuItems[0].textContent).to.contain('Ceph Cluster 1');
-    expect(menuItems[1].textContent).to.contain('Buliding Up Backup Plan');
-    expect(menuItems[2].textContent).to.contain('List Backup Tasks');
+  it('Backup Plan should render radio buttoms', () => {
+    expect(vm.$el.querySelector('input[value="RBD"]')).to.exist;
+    expect(vm.$el.querySelector('label[for="radio1"]').textContent)
+      .to.contain('RBD(block device)');
+
+    expect(vm.$el.querySelector('input[value="RADOS"]')).to.exist;
+    expect(vm.$el.querySelector('label[for="radio4"]').textContent)
+      .to.contain('RADOS');
   });
 });
