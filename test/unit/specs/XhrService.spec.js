@@ -46,7 +46,7 @@ describe('Xhr.vue', () => {
       done();
       expect(typeof data).is.equal('object');
       expect(data[0].hasOwnProperty('name') &&
-        data[0].hasOwnProperty('is_onbackup')).to.be(true);
+        data[0].hasOwnProperty('is_onbackup')).is.equal(true);
     }, (error) => {
       assert.fail(error);
     });
