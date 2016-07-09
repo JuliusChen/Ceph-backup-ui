@@ -206,7 +206,7 @@ export default {
   methods: {
     poll() {
       setTimeout(() => {
-        Xhr.methods.getTaskProgress(this.taskUUID)
+        this.getTaskProgress(this.taskUUID)
         .then((res) => {
           if (res.progress !== 100) {
             this.taskProgress = res.progress;
@@ -220,7 +220,7 @@ export default {
       }, 1000);
     },
     reset() {
-      Xhr.methods.getPoolList()
+      this.getPoolList()
       .then(
         (res) => {
           if (typeof res === 'object') {
@@ -261,6 +261,12 @@ export default {
     },
     sendBackupTask(item) {
       return Xhr.methods.sendBackupTask(item);
+    },
+    getPoolList() {
+      return Xhr.methods.getPoolList();
+    },
+    getTaskProgress(UUID) {
+      return Xhr.methods.getTaskProgress(UUID);
     },
   },
 };
