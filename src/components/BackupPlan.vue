@@ -246,7 +246,7 @@ export default {
       this.submitItem.backupIteration = '';
     },
     submit() {
-      Xhr.methods.sendBackupTask(this.submitItem)
+      this.sendBackupTask(this.submitItem)
       .then(
         (res) => {
           if (typeof res === 'object') {
@@ -258,6 +258,9 @@ export default {
         });
 
       this.reset();
+    },
+    sendBackupTask(item) {
+      return Xhr.methods.sendBackupTask(item);
     },
   },
 };
