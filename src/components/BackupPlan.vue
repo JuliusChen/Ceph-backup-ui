@@ -265,14 +265,14 @@ export default {
 
       this.reset();
     },
-    getTaskProgress(uuid) {
-      return Xhr.methods.getTaskProgress(uuid);
-    },
-    sendBackupTask(submitItem) {
-      return Xhr.methods.sendBackupTask(submitItem);
+    sendBackupTask(item) {
+      return Xhr.methods.sendBackupTask(item);
     },
     getPoolList() {
       return Xhr.methods.getPoolList();
+    },
+    getTaskProgress(UUID) {
+      return Xhr.methods.getTaskProgress(UUID);
     },
   },
 };
