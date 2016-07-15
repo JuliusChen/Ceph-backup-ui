@@ -27,8 +27,11 @@ describe('BackupPlan.vue', () => {
       selectedRADOSPools: ['rbd', 'rbd2'],
     };
 
+    PlanMethodCall.starttime = '2016-08-01';
+    PlanMethodCall.endttime = '2017-08-01';
+
     // after receving Xhr request return Promise
-    task.withArgs({ selectedRADOSPools: ['rbd', 'rbd2'] })
+    task.withArgs(PlanMethodCall.submitItem)
        .returns(Promise.resolve({ uuid: '394a8438-3b02-4a8b-97c9-7f2690e539c4' }));
 
     PlanMethodCall.submit();
@@ -87,13 +90,15 @@ describe('BackupPlan.vue', () => {
     // create mock Xhr request result
     const task = sinon.stub(PlanMethodCall, 'getTaskProgress');
 
+    task.withArgs('394a8438-3b02-4a8b-97c9-7f2690e539c4')
+       .returns(Promise.resolve({ progress: 40 }));
+
     PlanMethodCall.poll();
 
-    // // after stub async method complete to verify
+    // after stub async method complete to verify
     process.nextTick(() => {
       done();
       expect(task.called).is.equal(true);
-      expect(PlanMethodCall.taskUUID).is.empty;
     });
 
     task.restore();

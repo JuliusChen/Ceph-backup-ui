@@ -6,6 +6,7 @@
           <tree-menu-item is-expanded view="ClusterPortal" icon="wifi_tethering" title="Ceph Cluster 1">
             <tree-menu-item is-expanded view="BackupPlan" icon="view_agenda" title="Buliding Up Backup Plan"></tree-menu-item>
             <tree-menu-item is-expanded view="TaskList" icon="format_list_bulleted" title="List Backup Tasks"></tree-menu-item>
+            <tree-menu-item is-expanded view="Calendar" icon="format_list_bulleted" title="List Calendar"></tree-menu-item>
           </tree-menu-item>
         </tree-menu>
       </div>

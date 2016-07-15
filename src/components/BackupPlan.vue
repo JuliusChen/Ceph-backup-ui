@@ -43,12 +43,12 @@
               <input type="number"  v-model="submitItem.backupInteration" id="backupIteraion" min="0" max="100">
             </div>
           </div>
-      </div>
+        </div>
 
       <input value="RADOS" type="radio" id="radio4" v-model="picked"/>
       <label for="radio4">RADOS</label><br>  
       <div v-if="state.isRADOS" class="tab">
-        <div class="FixedHeightContainer">
+        <div class="FixedHeightContainer hoverable">
           <span>Selected Backup pools</span>
           <div class="Content">
             <div v-for="pool in RADOSpoolists">
@@ -57,6 +57,25 @@
             </div>
           </div>
         </div>
+      </div>
+    
+      <div>
+       <div class="input-field col s12">
+          <span>Start Date：</span>
+          <date-picker :time="" :time.sync="starttime" :option="option"></date-picker>
+        </div>
+        <div class="input-field col s12">
+          <span>End time：</span>
+          <date-picker :time.sync="endtime" :option="option"></date-picker>
+        </div>
+      </div> 
+
+      <div>
+        <label>Repeat Option</label>
+        <select class="browser-default" v-model="submitItem.repeated">
+          <option value="" disabled selected>Choose your option</option>
+          <option v-for="option in repeatedOPtions" value="{{option}}">{{option}}</option>
+        </select>
       </div>
     </form>
 
@@ -134,13 +153,35 @@ h1 {
 
 <script>
 import Xhr from './XhrService.vue';
+import myDatepicker from 'vue-datepicker';
 
 export default {
   components: {
     Xhr,
+    'date-picker': myDatepicker,
   },
   data() {
     return {
+      repeatedOPtions: ['every day', 'every week', 'every month'],
+      starttime: '',
+      endtime: '',
+      option: {
+        type: 'day',
+        week: ['Mo', 'Tu', 'We', 'Th', 'Fr', 'Sa', 'Su'],
+        month: ['January', 'February', 'March', 'April', 'May', 'June', 'July',
+         'August', 'September', 'October', 'November', 'Decemberee'],
+        format: 'YYYY-MM-DD',
+        placeholder: 'when?',
+        color: {
+          header: '#26a69a',
+          headerText: '#fffff',
+        },
+        buttons: {
+          ok: 'Ok',
+          cancel: 'Cancel',
+        },
+      },
+      repeated: '',
       picked: '',
       selected: '',
       isBackuping: false,
@@ -160,6 +201,9 @@ export default {
         selectedimages: [],
         backupNumberCount: '',
         backupIteration: '',
+        starttime: '',
+        endtime: '',
+        repeated: '',
       },
       RBDpoolLists: ['RBD pool 0', 'RBD pool 1', 'RBD pool 2'],
       RADOSpoolists: [],
