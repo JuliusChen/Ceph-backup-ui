@@ -37,6 +37,15 @@ export default({
         (res => res.statusText)
       );
     },
+    getTaskList() {
+      return Vue.http({
+        url: `${webUrl}/tasks/`,
+        method: 'GET',
+      }).then(
+        (res => res.data),
+        (res => res.statusText)
+      );
+    },
     getTaskProgress(Task) {
       return Vue.http({
         url: `${webUrl}/tasks/${Task}/progress`,

@@ -35,8 +35,9 @@ h1 {
 
 <script>
 import MessageBox from './MessageBox';
+import Xhr from './XhrService';
+import Vue from 'vue';
 const async = require('async');
-const $ = require('jquery');
 
 
 export default {
@@ -52,7 +53,8 @@ export default {
     };
   },
   ready() {
-    $.get('/api/v1/tasks/', (result) => {
+    this.getTaskList().
+    then((result) => {
       this.$data.tasks = result;
       for (const task of this.$data.tasks) {
         let rate = 0;
@@ -69,9 +71,10 @@ export default {
     },
     update_rate(task) {
       setTimeout(() => {
-        $.get(`/api/v1/tasks/${task[1].uuid}/progress`, (result) => {
+        this.getTaskProgress(task[1].uuid)
+        .then((result) => {
           const updatedTask = {};
-          $.extend(updatedTask, task[1]);
+          Vue.util.extend(updatedTask, task[1]);
           if (result.progress < 100 && result.progress !== null) {
             updatedTask.rate = result.progress;
             this.tasks.$set(task[0], updatedTask);
@@ -82,6 +85,12 @@ export default {
           }
         });
       }, 1000);
+    },
+    getTaskProgress(uuid) {
+      return Xhr.methods.getTaskProgress(uuid);
+    },
+    getTaskList() {
+      return Xhr.methods.getTaskList();
     },
   },
   watch: {
