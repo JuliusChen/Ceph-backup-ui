@@ -1,6 +1,11 @@
 <template>
   <div v-if="!isBackuping">
     <form class="col s12">
+      <div class="input-field col s12">
+          <input id="last_name" type="text" class="validate">
+          <label for="last_name">Last Name</label>
+      </div>
+
       <input value="RBD" type="radio" id="radio1" v-model="picked"/>
       <label for="radio1">RBD(block device)</label><br>
       <div v-if="state.isRBD" class="tab">
@@ -206,7 +211,7 @@ export default {
   methods: {
     poll() {
       setTimeout(() => {
-        Xhr.methods.getTaskProgress(this.taskUUID)
+        this.getTaskProgress(this.taskUUID)
         .then((res) => {
           if (res.progress !== 100) {
             this.taskProgress = res.progress;
@@ -220,7 +225,7 @@ export default {
       }, 1000);
     },
     reset() {
-      Xhr.methods.getPoolList()
+      this.getPoolList()
       .then(
         (res) => {
           if (typeof res === 'object') {
@@ -246,7 +251,7 @@ export default {
       this.submitItem.backupIteration = '';
     },
     submit() {
-      Xhr.methods.sendBackupTask(this.submitItem)
+      this.sendBackupTask(this.submitItem)
       .then(
         (res) => {
           if (typeof res === 'object') {
@@ -258,6 +263,15 @@ export default {
         });
 
       this.reset();
+    },
+    getTaskProgress(uuid) {
+      return Xhr.methods.getTaskProgress(uuid);
+    },
+    sendBackupTask(submitItem) {
+      return Xhr.methods.sendBackupTask(submitItem);
+    },
+    getPoolList() {
+      return Xhr.methods.getPoolList();
     },
   },
 };
