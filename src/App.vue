@@ -3,7 +3,8 @@
 </template>
 
 <script>
-require('materialize-css/dist/css/materialize.min.css');
+import 'materialize-css/bin/materialize.css';
+import 'materialize-css/bin/materialize.js';
 require('material-design-icons/iconfont/material-icons.css');
 import BackupPage from './components/BackupPage.vue';
 

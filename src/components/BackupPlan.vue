@@ -1,9 +1,9 @@
 <template>
-  <div v-if="!isBackuping">
+  <div  class="row" v-if="!isBackuping">
     <form class="col s12">
       <div class="input-field col s12">
-          <input id="last_name" type="text" class="validate">
-          <label for="last_name">Last Name</label>
+          <input id="plan_name" type="text" class="validate">
+          <label for="plan_name">Plan Name</label>
       </div>
 
       <input value="RBD" type="radio" id="radio1" v-model="picked"/>
@@ -12,7 +12,6 @@
         <input value="RBDPool" type="radio" id="radio2" v-model="selected"/>
         <label for="radio2">Backup RBD Pools</label><br>
         <div v-if="state.useRBDPool">
-
           <div v-for="pool in RBDpoolLists" class="tab">
             <input value="{{ pool }}" type="checkbox" id="{{ pool }}" v-model="submitItem.selectedRBDPools"/>
             <label for="{{ pool }}">{{ pool }}</label><br>
@@ -21,12 +20,12 @@
 
         <input value="RBDImage" type="radio" id="radio3" v-model="selected"/>
         <label for="radio3">Backup Selected Pool and Specified Images</label><br>
-          <div v-if="state.useRBDImage">
+          <div v-if="state.useRBDImage" class="input-field col s12">
             <select class="browser-default" v-model="submitItem.selectedRBDPool">
               <option value="" disabled selected>Choose your pool</option>
               <option v-for="pool in RBDpoolLists" value="{{ pool }}">{{ pool }}</option>
             </select>
-            <div class="FixedHeightContainer">
+            <div class="FixedHeightContainer col s12">
               <span>Selected Images</span>
               <div class="Content">
                 <div v-for="image in imageLists">
@@ -35,11 +34,13 @@
                 </div>
               </div>
             </div>
-            <div>
+            <div class="input-field col s12">
               <label for="backupCount">Incremental backup counts between full backup</label>
-              <input type="number" placeholder="Pick a number" v-model="submitItem.backupNumberCount" id="backupCount" min="0" max="100">
+              <input type="number" v-model="submitItem.backupNumberCount" id="backupCount" min="0" max="100">
+            </div>
+            <div class="input-field col s12">
               <label for="backupIteraion">Preserve backup iteration count</label>
-              <input type="number" placeholder="Pick a number" v-model="submitItem.backupInteration" id="backupIteraion" min="0" max="100">
+              <input type="number"  v-model="submitItem.backupInteration" id="backupIteraion" min="0" max="100">
             </div>
           </div>
       </div>
