@@ -62,7 +62,7 @@
       <div>
        <div class="input-field col s12">
           <span>Start Date：</span>
-          <date-picker :time="" :time.sync="starttime" :option="option"></date-picker>
+          <date-picker :time.sync="starttime" :option="option"></date-picker>
         </div>
         <div class="input-field col s12">
           <span>End time：</span>
@@ -89,6 +89,12 @@
       <i class="material-icons right">send</i>
     </button>
   </div>
+
+    <div class="test">
+    Departure Date:{{starttime}}
+    <br> Return Date：{{endtime}}
+  </div>
+  <input type="time">
 
   <div v-if="isBackuping">
     <div class="preloader-wrapper big active center">
@@ -155,6 +161,13 @@ h1 {
 import Xhr from './XhrService.vue';
 import myDatepicker from 'vue-datepicker';
 
+function getTimestamp(time) {
+  const string = time.split(/:|-|\s/);
+  const date = new Date(string[0], string[1] - 1, string[2], string[3], string[4]);
+  console.log(date.getTime() / 1000);
+  return date.getTime() / 1000;
+}
+
 export default {
   components: {
     Xhr,
@@ -166,11 +179,11 @@ export default {
       starttime: '',
       endtime: '',
       option: {
-        type: 'day',
+        type: 'min',
         week: ['Mo', 'Tu', 'We', 'Th', 'Fr', 'Sa', 'Su'],
         month: ['January', 'February', 'March', 'April', 'May', 'June', 'July',
          'August', 'September', 'October', 'November', 'Decemberee'],
-        format: 'YYYY-MM-DD',
+        format: 'YYYY-MM-DD HH:mm',
         placeholder: 'when?',
         color: {
           header: '#26a69a',
@@ -251,6 +264,12 @@ export default {
       if (val === true) {
         this.poll();
       }
+    },
+    starttime(val) {
+      this.submitItem.starttime = getTimestamp(val);
+    },
+    endtime(val) {
+      this.submitItem.endtime = getTimestamp(val);
     },
   },
   methods: {
