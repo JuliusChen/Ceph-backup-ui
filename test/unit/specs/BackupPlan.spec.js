@@ -27,8 +27,8 @@ describe('BackupPlan.vue', () => {
       selectedRADOSPools: ['rbd', 'rbd2'],
     };
 
-    PlanMethodCall.starttime = '2016-08-01';
-    PlanMethodCall.endttime = '2017-08-01';
+    PlanMethodCall.starttime = '2016-08-01 17:00';
+    PlanMethodCall.endtime = '2017-08-01 18:00';
 
     // after receving Xhr request return Promise
     task.withArgs(PlanMethodCall.submitItem)
@@ -89,18 +89,40 @@ describe('BackupPlan.vue', () => {
   it('poll method should call getTaskProgress', (done) => {
     // create mock Xhr request result
     const task = sinon.stub(PlanMethodCall, 'getTaskProgress');
+    // set Fake Timer
+    const clock = sinon.useFakeTimers();
 
     task.withArgs('394a8438-3b02-4a8b-97c9-7f2690e539c4')
        .returns(Promise.resolve({ progress: 40 }));
 
+    PlanMethodCall.taskUUID = '394a8438-3b02-4a8b-97c9-7f2690e539c4';
+
     PlanMethodCall.poll();
+
+    // invoke setTimeout after 1000ms
+    clock.tick(1100);
 
     // after stub async method complete to verify
     process.nextTick(() => {
-      done();
       expect(task.called).is.equal(true);
+      done();
     });
 
+    clock.restore();
     task.restore();
+  });
+
+  it('Date format should tranfer to timestamp format correctly', (done) => {
+    PlanMethodCall.starttime = '2016-08-02 19:57';
+    PlanMethodCall.endtime = '2017-08-03 16:42';
+
+    const timestamp = sinon.spy(PlanMethodCall, 'getTimestamp');
+
+    process.nextTick(() => {
+      expect(timestamp.called).is.equal(true);
+      expect(PlanMethodCall.submitItem.starttime).is.equal(1470139020);
+      expect(PlanMethodCall.submitItem.endtime).is.equal(1501749720);
+      done();
+    });
   });
 });

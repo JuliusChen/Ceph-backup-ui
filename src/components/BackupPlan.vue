@@ -161,13 +161,6 @@ h1 {
 import Xhr from './XhrService.vue';
 import myDatepicker from 'vue-datepicker';
 
-function getTimestamp(time) {
-  const string = time.split(/:|-|\s/);
-  const date = new Date(string[0], string[1] - 1, string[2], string[3], string[4]);
-  console.log(date.getTime() / 1000);
-  return date.getTime() / 1000;
-}
-
 export default {
   components: {
     Xhr,
@@ -266,10 +259,10 @@ export default {
       }
     },
     starttime(val) {
-      this.submitItem.starttime = getTimestamp(val);
+      this.submitItem.starttime = this.getTimestamp(val);
     },
     endtime(val) {
-      this.submitItem.endtime = getTimestamp(val);
+      this.submitItem.endtime = this.getTimestamp(val);
     },
   },
   methods: {
@@ -336,6 +329,11 @@ export default {
     },
     getTaskProgress(UUID) {
       return Xhr.methods.getTaskProgress(UUID);
+    },
+    getTimestamp(time) {
+      const string = time.split(/:|-|\s/);
+      const date = new Date(string[0], string[1] - 1, string[2], string[3], string[4]);
+      return date.getTime() / 1000;
     },
   },
 };
