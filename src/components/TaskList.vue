@@ -36,8 +36,7 @@ h1 {
 <script>
 import MessageBox from './MessageBox';
 import Xhr from './XhrService';
-import Vue from 'vue';
-const async = require('async');
+import async from 'async';
 
 
 export default {
@@ -74,7 +73,7 @@ export default {
         this.getTaskProgress(task[1].uuid)
         .then((result) => {
           const updatedTask = {};
-          Vue.util.extend(updatedTask, task[1]);
+          Object.assign(updatedTask, task[1]);
           if (result.progress < 100 && result.progress !== null) {
             updatedTask.rate = result.progress;
             this.tasks.$set(task[0], updatedTask);
