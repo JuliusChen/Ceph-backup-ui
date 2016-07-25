@@ -5,7 +5,6 @@ import VueResource from 'vue-resource';
 Vue.use(VueResource);
 
 const webUrl = 'http://172.25.0.155/api/v1';
-// const MockServer = 'http://private-anon-a4e11a3bd-backuprestapi.apiary-mock.com/api/v1';
 
 export default({
   data() {

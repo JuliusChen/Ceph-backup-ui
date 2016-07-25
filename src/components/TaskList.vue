@@ -2,7 +2,7 @@
   <div>
     <h3>Task List</h3>
   </div>
-  <table class="mdl-data-table mdl-js-data-table">
+  <table class="mdl-data-table mdl-js-data-table highlight">
     <thead>
       <tr>
         <th>No</th>

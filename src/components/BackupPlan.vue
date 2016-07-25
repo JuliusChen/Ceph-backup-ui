@@ -6,6 +6,14 @@
           <label for="plan_name">Plan Name</label>
       </div>
 
+      <div>
+        <label>Backup Directory</label>
+        <select class="browser-default" v-model="submitItem.backupDirectory">
+          <option value="" disabled selected>Choose your option</option>
+          <option v-for="option in backupDirOptions" value="{{option}}">{{option}}</option>
+        </select>
+      </div>
+
       <input value="RBD" type="radio" id="radio1" v-model="picked"/>
       <label for="radio1">RBD(block device)</label><br>
       <div v-if="state.isRBD" class="tab">
@@ -74,7 +82,7 @@
         <label>Repeat Option</label>
         <select class="browser-default" v-model="submitItem.repeated">
           <option value="" disabled selected>Choose your option</option>
-          <option v-for="option in repeatedOPtions" value="{{option}}">{{option}}</option>
+          <option v-for="option in repeatedOptions" value="{{option}}">{{option}}</option>
         </select>
       </div>
     </form>
@@ -89,12 +97,6 @@
       <i class="material-icons right">send</i>
     </button>
   </div>
-
-    <div class="test">
-    Departure Date:{{starttime}}
-    <br> Return Date：{{endtime}}
-  </div>
-  <input type="time">
 
   <div v-if="isBackuping">
     <div class="preloader-wrapper big active center">
@@ -168,14 +170,15 @@ export default {
   },
   data() {
     return {
-      repeatedOPtions: ['every day', 'every week', 'every month'],
+      repeatedOptions: ['every day', 'every week', 'every month'],
+      backupDirOptions: ['/mnt/BackUP/', '~/Document/BackUP', '~/BackUP'],
       starttime: '',
       endtime: '',
       option: {
         type: 'min',
         week: ['Mo', 'Tu', 'We', 'Th', 'Fr', 'Sa', 'Su'],
         month: ['January', 'February', 'March', 'April', 'May', 'June', 'July',
-         'August', 'September', 'October', 'November', 'Decemberee'],
+         'August', 'September', 'October', 'November', 'December'],
         format: 'YYYY-MM-DD HH:mm',
         placeholder: 'when?',
         color: {
@@ -207,6 +210,7 @@ export default {
         selectedimages: [],
         backupNumberCount: '',
         backupIteration: '',
+        backupDirectory: '',
         starttime: '',
         endtime: '',
         repeated: '',
