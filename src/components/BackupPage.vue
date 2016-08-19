@@ -6,6 +6,7 @@
           <tree-menu-item is-expanded view="ClusterPortal" icon="wifi_tethering" title="Ceph Cluster 1">
             <tree-menu-item is-expanded view="BackupPlan" icon="view_agenda" title="Buliding Up Backup Plan"></tree-menu-item>
             <tree-menu-item is-expanded view="TaskList" icon="format_list_bulleted" title="List Backup Tasks"></tree-menu-item>
+            <tree-menu-item is-expanded view="PlanList" icon="format_list_bulleted" title="List Plan Tasks"></tree-menu-item>
           </tree-menu-item>
         </tree-menu>
       </div>
@@ -23,12 +24,13 @@ h1 {
 </style>
 
 <script>
-import window from './window.vue';
-import TreeMenu from './TreeMenu.vue';
-import TreeMenuItem from './TreeMenuItem.vue';
-import TaskList from './TaskList.vue';
-import BackupPlan from './BackupPlan.vue';
+import window from './window';
+import TreeMenu from './TreeMenu';
+import TreeMenuItem from './TreeMenuItem';
+import TaskList from './TaskList';
+import BackupPlan from './BackupPlan';
 import ClusterPortal from './ClusterPortal/ClusterPortal';
+import PlanList from './PlanList';
 
 export default {
   components: {
@@ -36,6 +38,7 @@ export default {
     TreeMenu,
     TreeMenuItem,
     TaskList,
+    PlanList,
     BackupPlan,
     ClusterPortal,
   },

@@ -38,7 +38,6 @@ import MessageBox from './MessageBox';
 import Xhr from './XhrService';
 import async from 'async';
 
-
 export default {
   components: {
     MessageBox,
@@ -78,7 +77,7 @@ export default {
             updatedTask.rate = result.progress;
             this.tasks.$set(task[0], updatedTask);
             this.update_rate(task);
-          } else {
+          } else if (typeof result === 'object' && result.progress === null) {
             updatedTask.rate = 100;
             this.tasks.$set(task[0], updatedTask);
           }
@@ -94,10 +93,12 @@ export default {
   },
   watch: {
     polling_task() {
-      const tasks = this.tasks.entries();
-      async.map(tasks, (task) => {
-        this.update_rate(task);
-      });
+      if (this.tasks.length > 0) {
+        const tasks = this.tasks.entries();
+        async.map(tasks, (task) => {
+          this.update_rate(task);
+        });
+      }
     },
   },
 };

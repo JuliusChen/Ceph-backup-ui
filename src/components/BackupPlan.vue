@@ -1,39 +1,44 @@
 <template>
-  <div  class="row" v-if="!isBackuping">
-    <form class="col s12">
-      <div class="input-field col s12">
-          <input id="plan_name" type="text" class="validate">
-          <label for="plan_name">Plan Name</label>
-      </div>
+  <div>
+    <h3>Backup Task</h3>
+  </div>
 
-      <div>
-        <label>Backup Directory</label>
-        <select class="browser-default" v-model="submitItem.backupDirectory">
-          <option value="" disabled selected>Choose your option</option>
-          <option v-for="option in backupDirOptions" value="{{option}}">{{option}}</option>
-        </select>
-      </div>
+  <div class="row" v-if="!isBackuping">
+    <div class="input-field col s12 l6">
+        <input id="plan_name" type="text" class="validate">
+        <label for="plan_name">Plan Name</label>
+    </div>
 
-      <input value="RBD" type="radio" id="radio1" v-model="picked"/>
-      <label for="radio1">RBD(block device)</label><br>
-      <div v-if="state.isRBD" class="tab">
-        <input value="RBDPool" type="radio" id="radio2" v-model="selected"/>
-        <label for="radio2">Backup RBD Pools</label><br>
-        <div v-if="state.useRBDPool">
-          <div v-for="pool in RBDpoolLists" class="tab">
-            <input value="{{ pool }}" type="checkbox" id="{{ pool }}" v-model="submitItem.selectedRBDPools"/>
-            <label for="{{ pool }}">{{ pool }}</label><br>
+    <div class="input-field col s12 l6">
+      <ui-select name="Directory" label="Backup Directory" :options="backupDirOptions"
+        placeholder="Select a directory" v-model="submitItem.backupDirectory">
+      </ui-select>
+    </div>
+
+    <div class="col s12">
+      <ui-tabs fullwidth background-color="default" text-color="balck"
+                text-color-active="balck" indicator-color="balck">
+        <ui-tab header="RBD" id="RBD">
+          <input value="RBDPool" type="radio" id="radio2" v-model="selected"/>
+          <label for="radio2">Backup RBD Pools</label><br>
+          <div v-if="state.useRBDPool">
+            <div v-for="pool in RBDpoolLists" class="tab">
+              <input value="{{ pool }}" type="checkbox" id="{{ pool }}" v-model="submitItem.selectedRBDPools"/>
+              <label for="{{ pool }}">{{ pool }}</label><br>
+            </div>
           </div>
-        </div>
 
-        <input value="RBDImage" type="radio" id="radio3" v-model="selected"/>
-        <label for="radio3">Backup Selected Pool and Specified Images</label><br>
-          <div v-if="state.useRBDImage" class="input-field col s12">
-            <select class="browser-default" v-model="submitItem.selectedRBDPool">
-              <option value="" disabled selected>Choose your pool</option>
-              <option v-for="pool in RBDpoolLists" value="{{ pool }}">{{ pool }}</option>
-            </select>
-            <div class="FixedHeightContainer col s12">
+          <input value="RBDImage" type="radio" id="radio3" v-model="selected"/>
+          <label for="radio3">Backup Selected Pool and Specified Images</label><br>
+
+          <div v-if="state.useRBDImage">
+            <div class="space">
+              <ui-select name="selected pool" label="Select BackUP Pool" :options="RBDpoolLists"
+                placeholder="Choose your pool" v-model="submitItem.repeated">
+              </ui-select>
+            </div>
+
+            <div class="FixedHeightContainer space">
               <span>Selected Images</span>
               <div class="Content">
                 <div v-for="image in imageLists">
@@ -42,60 +47,60 @@
                 </div>
               </div>
             </div>
-            <div class="input-field col s12">
-              <label for="backupCount">Incremental backup counts between full backup</label>
-              <input type="number" v-model="submitItem.backupNumberCount" id="backupCount" min="0" max="100">
-            </div>
-            <div class="input-field col s12">
-              <label for="backupIteraion">Preserve backup iteration count</label>
-              <input type="number"  v-model="submitItem.backupInteration" id="backupIteraion" min="0" max="100">
+            
+            <hr color="#FFFFF" size="10" width="100%">
+
+            <label for="backupCount">Incremental backup counts between full backup</label>
+            <input type="number" v-model="submitItem.backupNumberCount" id="backupCount" min="0" max="100">
+
+            <label for="backupIteraion">Preserve backup iteration count</label>
+            <input type="number"  v-model="submitItem.backupInteration" id="backupIteraion" min="0" max="100">
+          </div>
+        </ui-tab>
+
+        <ui-tab header="RADOS" id="RADOS">
+          <div class="FixedHeightContainer">
+            <span>Selected Backup pools</span>
+            <div class="Content">
+              <div v-for="pool in RADOSpoolists">
+                <input value="{{ pool }}" type="checkbox" id="{{ pool }}" v-model="submitItem.selectedRADOSPools"/>
+                <label for="{{ pool }}">{{ pool }}</label><br>
+              </div>
             </div>
           </div>
-        </div>
 
-      <input value="RADOS" type="radio" id="radio4" v-model="picked"/>
-      <label for="radio4">RADOS</label><br>  
-      <div v-if="state.isRADOS" class="tab">
-        <div class="FixedHeightContainer hoverable">
-          <span>Selected Backup pools</span>
-          <div class="Content">
-            <div v-for="pool in RADOSpoolists">
-              <input value="{{ pool }}" type="checkbox" id="{{ pool }}" v-model="submitItem.selectedRADOSPools"/>
-              <label for="{{ pool }}">{{ pool }}</label><br>
-            </div>
-          </div>
-        </div>
-      </div>
-    
-      <div>
-       <div class="input-field col s12">
-          <span>Start Date：</span>
-          <date-picker :time.sync="starttime" :option="option"></date-picker>
-        </div>
-        <div class="input-field col s12">
-          <span>End time：</span>
-          <date-picker :time.sync="endtime" :option="option"></date-picker>
-        </div>
-      </div> 
+          <hr color="#FFFFF" size="10" width="100%">
+        </ui-tab>
+      </ui-tabs>
+    </div>
 
-      <div>
-        <label>Repeat Option</label>
-        <select class="browser-default" v-model="submitItem.repeated">
-          <option value="" disabled selected>Choose your option</option>
-          <option v-for="option in repeatedOptions" value="{{option}}">{{option}}</option>
-        </select>
-      </div>
-    </form>
+    <div class="input-field col s12 l6">
+      <span>Start Date：</span>
+      <date-picker :time.sync="starttime" :option="option"></date-picker>
+    </div>
+    <div class="input-field col s12 l6">
+      <span>End time：</span>
+      <date-picker :time.sync="endtime" :option="option"></date-picker>
+    </div>
 
-    <button class="btn waves-effect waves-light space disabled" type="submit" name="action"
-      v-if="submitItem.selectedRADOSPools.length==0 || state.isRADOSMockData">Submit
-      <i class="material-icons right">send</i>
-    </button>
+    <div class="col s12 l6">
+      <ui-select name="RepeatOption" label="Repeat Option" :options="repeatedOptions"
+        placeholder="Choose your option" v-model="submitItem.repeated">
+      </ui-select>
+    </div>
 
-    <button class="btn waves-effect waves-light space" type="submit" name="action"
-      v-if="submitItem.selectedRADOSPools.length>0 && !state.isRADOSMockData" v-on:click="submit">Submit
-      <i class="material-icons right">send</i>
-    </button>
+    <div class="col s12">
+      <button class="btn waves-effect waves-light space disabled" type="submit" name="action"
+        v-if="submitItem.selectedRADOSPools.length==0 ">Submit
+        <i class="material-icons right">send</i>
+      </button>
+      <!-- || state.isRADOSMockData -->
+      <!-- && !state.isRADOSMockData -->
+      <button class="btn waves-effect waves-light space hoverable" type="submit" name="action"
+        v-if="submitItem.selectedRADOSPools.length>0 " v-on:click="submit">Submit
+        <i class="material-icons right">send</i>
+      </button>
+    </div>
   </div>
 
   <div v-if="isBackuping">
@@ -123,7 +128,7 @@ h1 {
 {
   float:left;
   height:140px;
-  width:100%; 
+  width:63%; 
   padding:3px; 
   background:#a9a;
 }
@@ -143,7 +148,7 @@ h1 {
 }
 .space
 {
-  margin-top: 2em;
+  margin-top: 1em;
 }
 .center
 {
@@ -160,6 +165,9 @@ h1 {
 </style>
 
 <script>
+import UiSelect from 'keen-ui/lib/UiSelect';
+import UiTabs from 'keen-ui/lib/UiTabs';
+import UiTab from 'keen-ui/lib/UiTab';
 import Xhr from './XhrService.vue';
 import myDatepicker from 'vue-datepicker';
 
@@ -167,6 +175,9 @@ export default {
   components: {
     Xhr,
     'date-picker': myDatepicker,
+    UiSelect,
+    UiTabs,
+    UiTab,
   },
   data() {
     return {
