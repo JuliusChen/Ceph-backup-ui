@@ -1,6 +1,6 @@
 <template>
   <!-- <div id="window" class="window resize-drag"> -->
-  <div id="window" class="window">
+  <div id="window" class="window resize-drag">
     <nav>
       <div class="nav-wrapper teal lighten-2">
         <!-- <span class="brand-logo">{{ icon }} {{ window_name }}</span> -->
@@ -115,7 +115,7 @@
 
 <style lang="scss">
 .window {
-  width: 85%;
+  width: 100%;
   min-height: 6.5em;
   height: 40%;
   line-height: 15px;

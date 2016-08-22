@@ -1,7 +1,7 @@
 <template>
   <window>
     <div class="row" id="app">
-      <div class="col s3">
+      <div class="col s12 l3">
         <tree-menu>
           <tree-menu-item is-expanded view="ClusterPortal" icon="wifi_tethering" title="Ceph Cluster 1">
             <tree-menu-item is-expanded view="BackupPlan" icon="view_agenda" title="Add Backup Plan"></tree-menu-item>
@@ -10,7 +10,7 @@
           </tree-menu-item>
         </tree-menu>
       </div>
-      <div class="col s9">
+      <div class="col s12 l9">
         <component :is="currentView"></component>
       </div>
     </div>
