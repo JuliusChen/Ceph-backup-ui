@@ -45,6 +45,7 @@
     &:hover {
       font-weight: 600;
       color: #5b5d5f;
+      background-color: #DCDCDC;
     }
   }
 

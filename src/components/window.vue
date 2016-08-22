@@ -1,13 +1,15 @@
 <template>
-  <div id="window" class="window resize-drag">
+  <!-- <div id="window" class="window resize-drag"> -->
+  <div id="window" class="window">
     <nav>
-      <div class="nav-wrapper grey lighten-2">
-        <span class="black-text">{{ icon }} {{ window_name }}</span>
+      <div class="nav-wrapper teal lighten-2">
+        <!-- <span class="brand-logo">{{ icon }} {{ window_name }}</span> -->
+        <i class="brand-logo material-icons">cloud</i>
         <ul class="right hide-on-med-and-down">
-          <li v-on:click="hide"><a><i class="material-icons black-text md-18">remove</i></a></li>
-          <li v-on:click="maximal" v-if="!is_maximal"><a><i class="material-icons black-text md-18">check_box_outline_blank</i></a>
-          <li v-on:click="rollback" v-if="is_maximal"><a><i class="material-icons black-text md-18">check_box_outline_blank</i></a>
-          <li v-on:click="close" class="nav-button"><a><i class="material-icons black-text md-18">close</i></a></li>
+          <li v-on:click="hide"><a><i class="material-icons white-text md-18">remove</i></a></li>
+          <li v-on:click="maximal" v-if="!is_maximal"><a><i class="material-icons white-text md-12">check_box_outline_blank</i></a>
+          <li v-on:click="rollback" v-if="is_maximal"><a><i class="material-icons white-text md-12">check_box_outline_blank</i></a>
+          <li v-on:click="close" class="nav-button"><a><i class="material-icons white-text md-12">close</i></a></li>
         </ul>
         </ul>
       </div>
@@ -23,7 +25,7 @@
     data() {
       return {
         icon: 'icon',
-        window_name: 'window1',
+        window_name: 'BackUP',
         is_maximal: false,
         currentWindow: document.getElementsByClassName('window resize-drag'),
       };
@@ -113,7 +115,7 @@
 
 <style lang="scss">
 .window {
-  width: 70%;
+  width: 85%;
   min-height: 6.5em;
   height: 40%;
   line-height: 15px;

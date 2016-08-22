@@ -4,7 +4,7 @@
       <div class="col s3">
         <tree-menu>
           <tree-menu-item is-expanded view="ClusterPortal" icon="wifi_tethering" title="Ceph Cluster 1">
-            <tree-menu-item is-expanded view="BackupPlan" icon="view_agenda" title="Buliding Up Backup Plan"></tree-menu-item>
+            <tree-menu-item is-expanded view="BackupPlan" icon="view_agenda" title="Add Backup Plan"></tree-menu-item>
             <tree-menu-item is-expanded view="TaskList" icon="format_list_bulleted" title="List Backup Tasks"></tree-menu-item>
             <tree-menu-item is-expanded view="PlanList" icon="format_list_bulleted" title="List Plan Tasks"></tree-menu-item>
           </tree-menu-item>

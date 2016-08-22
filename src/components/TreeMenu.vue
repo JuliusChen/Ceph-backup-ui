@@ -1,5 +1,5 @@
 <template>
-  <div class="tree-menu collection with-header">
+  <div class="tree-menu collection with-header z-depth-1 hoverable">
     <slot></slot>
   </div>
 </template>
