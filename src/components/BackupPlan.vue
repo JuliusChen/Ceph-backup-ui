@@ -16,8 +16,7 @@
     </div>
 
     <div class="col s12">
-      <ui-tabs fullwidth background-color="default" text-color="balck"
-                text-color-active="balck" indicator-color="balck">
+      <ui-tabs fullwidth>
         <ui-tab header="RBD" id="RBD">
           <input value="RBDPool" type="radio" id="radio2" v-model="selected"/>
           <label for="radio2">Backup RBD Pools</label><br>
@@ -32,22 +31,20 @@
           <label for="radio3">Backup Selected Pool and Specified Images</label><br>
 
           <div v-if="state.useRBDImage">
-            <div class="space">
+            <div class="col s12 l6 space">
               <ui-select name="selected pool" label="Select BackUP Pool" :options="RBDpoolLists"
-                placeholder="Choose your pool" v-model="submitItem.repeated">
+                placeholder="Choose your pool" :value.sync="submitItem.repeated">
               </ui-select>
             </div>
-
-            <div class="FixedHeightContainer space">
-              <span>Selected Images</span>
-              <div class="Content">
-                <div v-for="image in imageLists">
-                  <input value="{{ image }}" type="checkbox" id="{{ image }}" v-model="submitItem.selectedimages"/>
-                  <label for="{{ image }}">{{ image }}</label><br>
-                </div>
-              </div>
-            </div>
             
+            <div class="col s12 l6 sapce">
+              <ui-select
+                  label="Selected Images" placeholder="Select Backup images" name="backup_images"
+                  multiple :options="imageLists" help-text="Select at least 1 iamges"
+                  validation-rules="required|min:1"
+              ></ui-select>
+            </div>
+
             <hr color="#FFFFF" size="10" width="100%">
 
             <label for="backupCount">Incremental backup counts between full backup</label>
@@ -59,14 +56,12 @@
         </ui-tab>
 
         <ui-tab header="RADOS" id="RADOS">
-          <div class="FixedHeightContainer">
-            <span>Selected Backup pools</span>
-            <div class="Content">
-              <div v-for="pool in RADOSpoolists">
-                <input value="{{ pool }}" type="checkbox" id="{{ pool }}" v-model="submitItem.selectedRADOSPools"/>
-                <label for="{{ pool }}">{{ pool }}</label><br>
-              </div>
-            </div>
+          <div class="col s12 l6 sapce">
+            <ui-select
+                label="RADOS Pools" placeholder="Select Backup RADOS Pools" name="backup_pools"
+                multiple :options="RADOSpoolists" help-text="Select at least 1 pool"
+                validation-rules="required|min:1" :value.sync="submitItem.selectedRADOSPools"
+            ></ui-select>
           </div>
 
           <hr color="#FFFFF" size="10" width="100%">
@@ -124,27 +119,9 @@
 h1 {
   color: #42b983;
 }
-.FixedHeightContainer
-{
-  float:left;
-  height:140px;
-  width:63%; 
-  padding:3px; 
-  background:#a9a;
-}
-.Content
-{
-  height:114px;
-  overflow:auto;
-  background:#fff;
-}
 .tab
 {
   padding-left: 2em;
-}
-.tab2
-{
-  padding-left: 4em;
 }
 .space
 {
